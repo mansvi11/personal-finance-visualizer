@@ -1,38 +1,24 @@
 import { connectDB } from "@/lib/mongodb";
-import { Transaction } from "@/models/transaction";
-import { NextResponse } from "next/server";
+import Transaction from "@/models/transaction";
+import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/transactions
 export async function GET() {
-  console.log("API HIT: GET /api/transactions");
-  try {
-    await connectDB();
-    const transactions = await Transaction.find().sort({ date: -1 });
-    return NextResponse.json(transactions);
-  } catch (err) {
-    console.error("GET ERROR:", err);
-    return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
-  }
+  await connectDB();
+  const txns = await Transaction.find({});
+  return NextResponse.json(txns);
 }
 
-// POST /api/transactions
-export async function POST(req: Request) {
-  console.log("API HIT: POST /api/transactions");
-  try {
-    const body = await req.json();
-    const { amount, description, date, category } = body;
+export async function POST(req: NextRequest) {
+  await connectDB();
+  const body = await req.json();
+  const txn = await Transaction.create(body);
+  return NextResponse.json(txn);
+}
 
-    if (!amount || !description || !date || !category) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-    }
-
-    await connectDB();
-    const newTransaction = new Transaction({ amount, description, date, category });
-    const saved = await newTransaction.save();
-
-    return NextResponse.json(saved);
-  } catch (err) {
-    console.error("POST ERROR:", err);
-    return NextResponse.json({ error: "Failed to create" }, { status: 500 });
-  }
+export async function DELETE(req: NextRequest) {
+  await connectDB();
+  const id = req.nextUrl.searchParams.get("id");
+  if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+  await Transaction.findByIdAndDelete(id);
+  return NextResponse.json({ success: true });
 }
