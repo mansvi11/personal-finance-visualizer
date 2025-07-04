@@ -1,24 +1,24 @@
 import { connectDB } from "@/lib/mongodb";
-import Transaction from "@/models/transaction";
-import { NextRequest, NextResponse } from "next/server";
+import { Transaction } from "@/models/transaction";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   await connectDB();
-  const txns = await Transaction.find({});
-  return NextResponse.json(txns);
+  const transactions = await Transaction.find().sort({ createdAt: -1 });
+  return NextResponse.json(transactions);
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   await connectDB();
   const body = await req.json();
-  const txn = await Transaction.create(body);
-  return NextResponse.json(txn);
+  const transaction = await Transaction.create(body);
+  return NextResponse.json(transaction);
 }
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(req: Request) {
   await connectDB();
-  const id = req.nextUrl.searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+  const id = new URL(req.url).searchParams.get("id");
   await Transaction.findByIdAndDelete(id);
   return NextResponse.json({ success: true });
 }
+
