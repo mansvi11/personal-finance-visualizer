@@ -49,7 +49,9 @@ function getCategoryData(transactions: Transaction[]) {
   const totals: Record<string, number> = {};
   CATEGORIES.forEach((cat) => (totals[cat] = 0));
   transactions.forEach((txn) => {
-    totals[txn.category] += txn.amount;
+    if (totals.hasOwnProperty(txn.category)) {
+      totals[txn.category] += txn.amount;
+    }
   });
   return Object.entries(totals)
     .filter(([, total]) => total > 0)
@@ -62,11 +64,16 @@ export default function Home() {
 
   useEffect(() => {
     let mounted = true;
-    fetch("/api/transactions")
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/transactions");
+        const data = await res.json();
         if (mounted) setTransactions(data);
-      });
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+    fetchData();
     return () => {
       mounted = false;
     };
@@ -74,15 +81,19 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/transactions", {
-      method: "POST",
-      body: JSON.stringify(form),
-      headers: { "Content-Type": "application/json" },
-    });
-    if (res.ok) {
-      const newTxn = await res.json();
-      setTransactions([newTxn, ...transactions]);
-      setForm({ amount: "", description: "", date: "", category: "Food" });
+    try {
+      const res = await fetch("/api/transactions", {
+        method: "POST",
+        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (res.ok) {
+        const newTxn = await res.json();
+        setTransactions([newTxn, ...transactions]);
+        setForm({ amount: "", description: "", date: "", category: "Food" });
+      }
+    } catch (error) {
+      console.error("Error submitting transaction:", error);
     }
   };
 
@@ -146,17 +157,21 @@ export default function Home() {
           </motion.div>
           <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
             <h2 className="text-lg font-semibold mb-2">📊 Category Breakdown</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie data={getCategoryData(transactions)} dataKey="total" nameKey="category" cx="50%" cy="50%" outerRadius={100} label>
-                  {getCategoryData(transactions).map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Legend />
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            {getCategoryData(transactions).length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie data={getCategoryData(transactions)} dataKey="total" nameKey="category" cx="50%" cy="50%" outerRadius={100} label>
+                    {getCategoryData(transactions).map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-center text-sm text-gray-500 dark:text-gray-400">No category data to display.</p>
+            )}
           </motion.div>
         </div>
       </motion.div>
