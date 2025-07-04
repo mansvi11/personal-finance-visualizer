@@ -15,7 +15,6 @@ import {
 } from "recharts";
 import { motion } from "framer-motion";
 
-// Type definitions
 interface Transaction {
   _id?: string;
   amount: number;
@@ -32,14 +31,7 @@ interface TransactionForm {
 }
 
 const CATEGORIES = ["Food", "Shopping", "Bills", "Travel", "Other"];
-const COLORS = ["#93c5fd", "#fdba74", "#fca5a5", "#6ee7b7", "#c4b5fd"];
-
-const isDark = typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
-const bgGradient = isDark
-  ? "bg-gradient-to-tr from-gray-900 via-slate-800 to-indigo-900"
-  : "bg-gradient-to-tr from-gray-50 via-white to-indigo-100";
-const cardBase = isDark ? "bg-slate-800 text-gray-100" : "bg-white/80 text-gray-900";
-const textPrimary = isDark ? "text-indigo-300" : "text-indigo-900";
+const COLORS = ["#60a5fa", "#fb923c", "#f87171", "#34d399", "#a78bfa"];
 
 function getMonthlyData(transactions: Transaction[]) {
   const monthlyTotals: Record<string, number> = {};
@@ -99,21 +91,21 @@ export default function Home() {
   const topCategory = getCategoryData(transactions).sort((a, b) => b.total - a.total)[0]?.category || "N/A";
 
   return (
-    <main className={`min-h-screen ${bgGradient} p-6 transition-all`}>
+    <main className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 transition-all">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="max-w-4xl mx-auto">
-        <h1 className={`text-4xl font-bold mb-8 text-center drop-shadow ${textPrimary}`}>💸 Personal Finance Visualizer</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center drop-shadow text-indigo-700 dark:text-indigo-300">💸 Personal Finance Visualizer</h1>
 
         {/* Form */}
         <motion.form
           onSubmit={handleSubmit}
-          className="bg-white/90 backdrop-blur-md shadow-xl ring-1 ring-black/10 rounded-2xl p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10"
+          className="bg-white dark:bg-slate-800/80 backdrop-blur-md shadow-xl ring-1 ring-black/10 dark:ring-white/10 rounded-2xl p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
         >
-          <input type="number" placeholder="Amount" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="p-3 rounded-lg border border-gray-300" required />
-          <input type="text" placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="p-3 rounded-lg border border-gray-300" required />
-          <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="p-3 rounded-lg border border-gray-300" required />
-          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="p-3 rounded-lg border border-gray-300">
+          <input type="number" placeholder="Amount" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" required />
+          <input type="text" placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" required />
+          <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" required />
+          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent">
             {CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
@@ -123,17 +115,17 @@ export default function Home() {
 
         {/* Dashboard Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          <motion.div className={`${cardBase} shadow ring-1 ring-black/10 rounded-xl p-4 text-center hover:shadow-md transition`} whileHover={{ scale: 1.02 }}>
+          <motion.div className="bg-white dark:bg-slate-800/90 shadow ring-1 ring-black/10 dark:ring-white/10 rounded-xl p-4 text-center hover:shadow-md transition" whileHover={{ scale: 1.02 }}>
             <p className="text-sm">Total Spent</p>
             <p className="text-2xl font-bold">₹ {totalSpent}</p>
           </motion.div>
-          <motion.div className={`${cardBase} shadow ring-1 ring-black/10 rounded-xl p-4 text-center hover:shadow-md transition`} whileHover={{ scale: 1.02 }}>
+          <motion.div className="bg-white dark:bg-slate-800/90 shadow ring-1 ring-black/10 dark:ring-white/10 rounded-xl p-4 text-center hover:shadow-md transition" whileHover={{ scale: 1.02 }}>
             <p className="text-sm">Recent</p>
             {recentTxns.map((txn) => (
               <p key={txn._id} className="text-sm">{txn.description} - ₹{txn.amount}</p>
             ))}
           </motion.div>
-          <motion.div className={`${cardBase} shadow ring-1 ring-black/10 rounded-xl p-4 text-center hover:shadow-md transition`} whileHover={{ scale: 1.02 }}>
+          <motion.div className="bg-white dark:bg-slate-800/90 shadow ring-1 ring-black/10 dark:ring-white/10 rounded-xl p-4 text-center hover:shadow-md transition" whileHover={{ scale: 1.02 }}>
             <p className="text-sm">Top Category</p>
             <p className="text-lg font-semibold">{topCategory}</p>
           </motion.div>
@@ -145,10 +137,10 @@ export default function Home() {
             <h2 className="text-lg font-semibold mb-2">📅 Monthly Expenses</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getMonthlyData(transactions)}>
-                <XAxis dataKey="month" />
-                <YAxis />
+                <XAxis dataKey="month" stroke="#8884d8" />
+                <YAxis stroke="#8884d8" />
                 <Tooltip />
-                <Bar dataKey="total" fill="#93c5fd" />
+                <Bar dataKey="total" fill="#60a5fa" />
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
