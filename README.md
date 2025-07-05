@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+💸 Personal Finance Visualizer
+A modern, responsive finance dashboard built with Next.js, TypeScript, MongoDB, and Tailwind CSS — featuring income/expense tracking, budget monitoring, savings goals, and elegant light/dark mode support.
 
-## Getting Started
+✅ Live demo: View on Vercel
 
-First, run the development server:
+✨ Features
+✅ Add income and expenses with category, type, and date
 
-```bash
+📊 Dynamic analytics via monthly bar and pie charts (Recharts)
+
+🎯 Savings goals tracker with progress bars
+
+📉 Budget limits per category
+
+🌗 Light/Dark mode toggle
+
+⚡ Instant feedback with Sonner notifications
+
+🎨 Pastel UI theme with smooth animations (Framer Motion)
+
+🛠️ Tech Stack
+Framework: Next.js (App Router)
+
+Language: TypeScript
+
+Styling: Tailwind CSS
+
+UI Enhancements: Framer Motion, Sonner
+
+Database: MongoDB (via Mongoose)
+
+Hosting: Vercel
+
+Charts: Recharts
+
+🧑‍💻 Getting Started
+git clone https://github.com/mansvi11/personal-finance-visualizer.git
+cd personal-finance-visualizer
+npm install
+
+Create a .env.local file:
+MONGODB_URI=your-mongodb-connection-string
+
+Then start the development server:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📁 Project Structure
+.
+├── app
+│   ├── page.tsx             # Main UI Page
+│   ├── api
+│   │   ├── transactions     # CRUD for Transactions
+│   │   ├── budgets          # Budget limits per category
+│   │   └── goals            # Saving goals
+├── models                   # Mongoose models
+│   ├── transaction.ts
+│   ├── budget.ts
+│   └── goal.ts
+├── lib
+│   └── mongodb.ts           # Database connection logic
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🚀 Deployment
+Deployed on Vercel. Any push to the main branch will auto-deploy:
+git add .
+git commit -m "Updated dashboard UI and functionality"
+git push origin main
 
-## Learn More
+📝 To Do
+ Add auth with Clerk/Auth.js
 
-To learn more about Next.js, take a look at the following resources:
+ Export reports as CSV
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ Filter/search transactions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ Mobile view optimization
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+📬 Contact
+For queries or collaboration, reach out at mansvishukla2006@gmail.com
