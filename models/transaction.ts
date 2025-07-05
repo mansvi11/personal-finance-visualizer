@@ -1,13 +1,11 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose from "mongoose";
 
-const transactionSchema = new Schema(
-  {
-    amount: Number,
-    description: String,
-    date: String,
-    category: String,
-  },
-  { timestamps: true }
-);
+const TransactionSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  description: { type: String, required: true },
+  date: { type: String, required: true },
+  category: { type: String, required: true },
+  type: { type: String, enum: ["expense", "income"], required: true },
+});
 
-export const Transaction = models.Transaction || model("Transaction", transactionSchema);
+export const Transaction = mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);

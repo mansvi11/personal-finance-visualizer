@@ -31,11 +31,12 @@ interface Budget {
   limit: number;
 }
 
-interface Goal {
+interface GoalType {
   name: string;
   target: number;
   saved: number;
 }
+
 
 const CATEGORIES = ["Food", "Shopping", "Bills", "Travel", "Other"];
 const COLORS = ["#A3BFFA", "#C7D2FE", "#FBCFE8", "#FDE68A", "#BBF7D0"];
@@ -70,7 +71,7 @@ export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [form, setForm] = useState({ amount: "", description: "", date: "", category: "Food", type: "expense" });
   const [budgets, setBudgets] = useState<Budget[]>([]);
-  const [goals, setGoals] = useState<Goal[]>([]);
+  const [goals, setGoals] = useState<GoalType[]>([]);
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
