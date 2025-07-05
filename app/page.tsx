@@ -1,4 +1,4 @@
-// Updated app with Toaster, Dark/Light mode toggle, and Budgeting support
+// Updated app with Toaster, Dark/Light mode toggle, Budgeting, and Pastel Colors
 "use client";
 
 import { useEffect, useState } from "react";
@@ -31,7 +31,7 @@ interface Budget {
 }
 
 const CATEGORIES = ["Food", "Shopping", "Bills", "Travel", "Other"];
-const COLORS = ["#60a5fa", "#fb923c", "#f87171", "#34d399", "#a78bfa"];
+const COLORS = ["#AEC6CF", "#FFB347", "#FF6961", "#77DD77", "#CBAACB"];
 
 function getMonthlyData(transactions: Transaction[]) {
   const monthlyTotals: Record<string, number> = {};
@@ -106,20 +106,17 @@ export default function Home() {
   const topCategory = getCategoryData(transactions).sort((a, b) => b.total - a.total)[0]?.category || "N/A";
 
   return (
-    <main className={`min-h-screen transition-all p-6 ${theme === "dark" ? "bg-slate-900 text-white" : "bg-white text-gray-900"}`}>
+    <main className={`min-h-screen transition-all p-6 ${theme === "dark" ? "bg-slate-900 text-white" : "bg-[#fefefe] text-gray-800"}`}>
       <Toaster position="top-right" richColors />
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-4xl font-bold text-indigo-600 dark:text-indigo-300">💸 Personal Finance</h1>
-          <button
-            className="px-3 py-1 border rounded dark:border-gray-600"
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          >
+          <h1 className="text-4xl font-bold text-indigo-500 dark:text-indigo-200">🌸 Finance Visualizer</h1>
+          <button className="px-3 py-1 border rounded dark:border-gray-600" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
             {theme === "light" ? "🌙 Dark" : "☀️ Light"} Mode
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-4 bg-white dark:bg-slate-800/80 p-6 rounded-xl shadow">
+        <form onSubmit={handleSubmit} className="grid gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
           <input required value={form.amount} type="number" placeholder="Amount" onChange={(e) => setForm({ ...form, amount: e.target.value })} className="p-3 rounded-lg border bg-transparent" />
           <input required value={form.description} type="text" placeholder="Description" onChange={(e) => setForm({ ...form, description: e.target.value })} className="p-3 rounded-lg border bg-transparent" />
           <input required value={form.date} type="date" onChange={(e) => setForm({ ...form, date: e.target.value })} className="p-3 rounded-lg border bg-transparent" />
@@ -128,19 +125,19 @@ export default function Home() {
               <option key={cat}>{cat}</option>
             ))}
           </select>
-          <button type="submit" className="bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">Add</button>
+          <button type="submit" className="bg-pink-400 text-white py-2 rounded hover:bg-pink-500">Add</button>
         </form>
 
         <div className="grid sm:grid-cols-3 gap-4 mt-8">
-          <div className="bg-indigo-100 dark:bg-indigo-900 p-4 rounded-xl text-center">
+          <div className="bg-pink-100 dark:bg-pink-800 p-4 rounded-xl text-center">
             <p>Total Spent</p>
             <h2 className="text-2xl font-bold">₹ {totalSpent}</h2>
           </div>
-          <div className="bg-green-100 dark:bg-green-900 p-4 rounded-xl text-center">
+          <div className="bg-green-100 dark:bg-green-800 p-4 rounded-xl text-center">
             <p>Top Category</p>
             <h2 className="text-xl">{topCategory}</h2>
           </div>
-          <div className="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-xl">
+          <div className="bg-yellow-100 dark:bg-yellow-800 p-4 rounded-xl">
             <p className="font-medium mb-1">Recent</p>
             {recentTxns.map((txn) => (
               <p key={txn._id} className="text-sm">{txn.description} - ₹{txn.amount}</p>
@@ -154,9 +151,9 @@ export default function Home() {
             {budgets.map((b) => {
               const spent = transactions.filter((t) => t.category === b.category).reduce((sum, t) => sum + t.amount, 0);
               return (
-                <div key={b.category} className="bg-slate-100 dark:bg-slate-800 p-3 rounded">
+                <div key={b.category} className="bg-purple-100 dark:bg-purple-800 p-3 rounded">
                   <p>{b.category}: ₹{spent} / ₹{b.limit}</p>
-                  <div className="w-full bg-slate-300 dark:bg-slate-600 h-2 rounded">
+                  <div className="w-full bg-purple-300 dark:bg-purple-600 h-2 rounded">
                     <div
                       className={`h-2 rounded ${spent > b.limit ? "bg-red-500" : "bg-green-500"}`}
                       style={{ width: `${Math.min((spent / b.limit) * 100, 100)}%` }}
@@ -191,7 +188,7 @@ export default function Home() {
                 <XAxis dataKey="month" stroke="#8884d8" />
                 <YAxis stroke="#8884d8" />
                 <Tooltip />
-                <Bar dataKey="total" fill="#6366f1" />
+                <Bar dataKey="total" fill="#AEC6CF" />
               </BarChart>
             </ResponsiveContainer>
           </div>
